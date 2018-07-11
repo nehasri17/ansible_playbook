@@ -1,0 +1,36 @@
+---
+- name: this is to create a user in node
+  hosts: practice
+  become: true
+  tasks:
+  - name: to check the user
+    shell: cat /etc/passwd |grep phani | wc -l
+    register: user_check
+  - debug: var=user_check
+  - name: create a user if not exists alredy
+    user:
+       name: phani
+       state: present
+    register: user_creation
+    when: user_check.stdout == "0"
+  #- name: create a directory .ssh
+   # file:
+    #  path: /home/phani/.ssh
+     # state: directory
+     # owner: phani
+     # group: phani
+   # when: user_creation | success
+  #- name: to create authorized key file
+   # file:
+    #  path: /home/phani/.ssh/authorized_keys
+    #  state: touch
+    #  owner: phani
+    #  group: phani
+   # when: user_creation | success
+ # - name: to copy public key
+  #  authorized_key:
+   #   user: phani
+    #  state: present
+     # key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+    
